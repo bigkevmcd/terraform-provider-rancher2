@@ -4,11 +4,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-const (
-	tokenDefaultSessionDesc = "Terraform token temp token"
-	tokenDefaultTTL         = "60000"
-)
-
 //Schemas
 
 func tokenFields() map[string]*schema.Schema {

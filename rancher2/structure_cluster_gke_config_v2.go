@@ -4,13 +4,6 @@ import (
 	managementClient "github.com/rancher/rancher/pkg/client/generated/management/v3"
 )
 
-const (
-	defaultClusterGKEConfigVClusterIpv4CidrBlock = "10.0.0.0/16"
-	defaultClusterGKEConfigV2LoggingService      = "logging.googleapis.com/kubernetes"
-	defaultClusterGKEConfigV2MaintenanceWindow   = "00:00"
-	defaultClusterGKEConfigV2MonitoringService   = "monitoring.googleapis.com/kubernetes"
-)
-
 // Flatteners
 
 func flattenClusterGKEConfigV2ClusterAddons(in *managementClient.GKEClusterAddons) []interface{} {
@@ -282,10 +275,10 @@ func flattenClusterGKEConfigV2(in *managementClient.GKEClusterConfigSpec, p []in
 	if in.KubernetesVersion != nil && len(*in.KubernetesVersion) > 0 {
 		obj["kubernetes_version"] = *in.KubernetesVersion
 	}
-	if in.Labels != nil && len(in.Labels) > 0 {
+	if len(in.Labels) > 0 {
 		obj["labels"] = toMapInterface(in.Labels)
 	}
-	if in.Locations != nil && len(in.Locations) > 0 {
+	if len(in.Locations) > 0 {
 		obj["locations"] = toArrayInterface(in.Locations)
 	}
 	if in.LoggingService != nil && len(*in.LoggingService) > 0 {

@@ -56,7 +56,7 @@ func flattenClusterRKEConfigDNS(in *managementClient.DNSConfig) ([]interface{}, 
 		return []interface{}{}, nil
 	}
 
-	if in.NodeSelector != nil && len(in.NodeSelector) > 0 {
+	if len(in.NodeSelector) > 0 {
 		obj["node_selector"] = toMapInterface(in.NodeSelector)
 	}
 
@@ -68,7 +68,7 @@ func flattenClusterRKEConfigDNS(in *managementClient.DNSConfig) ([]interface{}, 
 		obj["linear_autoscaler_params"] = flattenClusterRKEConfigDNSLinearAutoscalerParams(in.LinearAutoscalerParams)
 	}
 
-	if in.Options != nil && len(in.Options) > 0 {
+	if len(in.Options) > 0 {
 		obj["options"] = toMapInterface(in.Options)
 	}
 

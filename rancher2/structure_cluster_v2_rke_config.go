@@ -20,11 +20,11 @@ func flattenClusterV2RKEConfig(in *provisionv1.RKEConfig) []interface{} {
 	obj["data_directories"] = flattenClusterV2RKEConfigDataDirectories(in.DataDirectories)
 	obj["upgrade_strategy"] = flattenClusterV2RKEConfigUpgradeStrategy(in.UpgradeStrategy)
 
-	if in.ChartValues.Data != nil && len(in.ChartValues.Data) > 0 {
+	if len(in.ChartValues.Data) > 0 {
 		yamlData, _ := interfaceToGhodssyaml(in.ChartValues.Data)
 		obj["chart_values"] = yamlData
 	}
-	if in.MachineGlobalConfig.Data != nil && len(in.MachineGlobalConfig.Data) > 0 {
+	if len(in.MachineGlobalConfig.Data) > 0 {
 		yamlData, _ := interfaceToGhodssyaml(in.MachineGlobalConfig.Data)
 		obj["machine_global_config"] = yamlData
 	}

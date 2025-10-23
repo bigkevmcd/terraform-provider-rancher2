@@ -14,7 +14,7 @@ const (
 )
 
 var (
-	clusterDrivers                = []string{clusterDriverImported, clusterDriverGKEV2, clusterDriverK3S, clusterDriverOKE, clusterDriverRKE, clusterDriverRKE2}
+	clusterDrivers                = []string{clusterDriverImported, clusterDriverGKEV2, clusterDriverK3S, clusterDriverOKE, clusterDriverRKE2}
 	clusterRegistrationTokenNames = []string{clusterRegistrationTokenName, "system"}
 )
 
@@ -123,16 +123,6 @@ func clusterFieldsV0() map[string]*schema.Schema {
 			Computed:  true,
 			Sensitive: true,
 		},
-		"rke_config": {
-			Type:          schema.TypeList,
-			MaxItems:      1,
-			Optional:      true,
-			Computed:      true,
-			ConflictsWith: []string{"aks_config", "eks_config", "gke_config", "k3s_config"},
-			Elem: &schema.Resource{
-				Schema: clusterRKEConfigFieldsV0(),
-			},
-		},
 		"k3s_config": {
 			Type:          schema.TypeList,
 			MaxItems:      1,
@@ -181,11 +171,6 @@ func clusterFieldsV0() map[string]*schema.Schema {
 			Elem: &schema.Resource{
 				Schema: answerFields(),
 			},
-		},
-		"cluster_template_id": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Cluster template ID",
 		},
 		"cluster_template_questions": {
 			Type:        schema.TypeList,
@@ -299,16 +284,6 @@ func clusterFields() map[string]*schema.Schema {
 			Type:      schema.TypeString,
 			Computed:  true,
 			Sensitive: true,
-		},
-		"rke_config": {
-			Type:          schema.TypeList,
-			MaxItems:      1,
-			Optional:      true,
-			Computed:      true,
-			ConflictsWith: []string{"aks_config_v2", "eks_config_v2", "gke_config_v2", "k3s_config", "oke_config", "rke2_config", "imported_config"},
-			Elem: &schema.Resource{
-				Schema: clusterRKEConfigFields(),
-			},
 		},
 		"rke2_config": {
 			Type:          schema.TypeList,

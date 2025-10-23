@@ -175,7 +175,7 @@ func flattenClusterAKSConfigV2(in *managementClient.AKSClusterConfigSpec, p []in
 	if in.Subnet != nil && len(*in.Subnet) > 0 {
 		obj["subnet"] = *in.Subnet
 	}
-	if in.Tags != nil && len(in.Tags) > 0 {
+	if len(in.Tags) > 0 {
 		obj["tags"] = toMapInterface(in.Tags)
 	}
 	if in.VirtualNetwork != nil && len(*in.VirtualNetwork) > 0 {

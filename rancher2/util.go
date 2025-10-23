@@ -7,7 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"math/rand"
 	"net/http"
@@ -112,7 +112,6 @@ func ToLower(s string) string {
 }
 
 func GetRandomPass(n int) string {
-	rand.Seed(time.Now().Unix())
 	b := make([]byte, n)
 	for i := range b {
 		b[i] = passDigits[rand.Int63()%int64(len(passDigits))]
@@ -204,7 +203,7 @@ func DoPost(url, data, cacert string, insecure bool, headers map[string]string) 
 	}
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		return response, err
@@ -276,7 +275,7 @@ func DoGet(url, username, password, token, cacert string, insecure bool) ([]byte
 	// Timings recorded as part of internal metrics
 	log.Println("Time to get req: ", float64((time.Since(start))/time.Millisecond), " ms")
 
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 
 }
 
@@ -429,16 +428,6 @@ func clusterIDFromProjectID(projectID string) (string, error) {
 	return projectID[0:strings.Index(projectID, clusterProjectIDSeparator)], nil
 }
 
-func splitProjectIDPart(id string) (projectID string) {
-	id = strings.TrimSuffix(id, clusterProjectIDSeparator)
-
-	if strings.Contains(id, clusterProjectIDSeparator) {
-		return id[strings.Index(id, clusterProjectIDSeparator)+1:]
-	}
-
-	return ""
-}
-
 // eg. "abc123:def456"(id) would return "abc123"(clusterID),"abc123:def456"(projectID)
 // eg. "abc123"(id) would return "abc123"(clusterID),""(projectID)
 func splitProjectID(id string) (clusterID, projectID string) {
@@ -449,18 +438,6 @@ func splitProjectID(id string) (clusterID, projectID string) {
 	}
 
 	return id, ""
-}
-
-func splitAppID(id string) (projectID, appID string, err error) {
-	separator := clusterProjectIDSeparator
-
-	fields := strings.Split(id, separator)
-
-	if len(fields) != 3 {
-		return "", "", fmt.Errorf("[ERROR] Getting App ID: Bad project id format %s", id)
-	}
-
-	return fields[0] + separator + fields[1], fields[1] + separator + fields[2], nil
 }
 
 func toArrayString(in []interface{}) []string {
@@ -562,17 +539,6 @@ func ghodssyamlToMapInterface(in string) (map[string]interface{}, error) {
 	return out, err
 }
 
-func ghodssyamlToInterface(in string, out interface{}) error {
-	if out == nil {
-		return nil
-	}
-	err := ghodssyaml.Unmarshal([]byte(in), out)
-	if err != nil {
-		return err
-	}
-	return err
-}
-
 func yamlToInterface(in string, out interface{}) error {
 	if out == nil {
 		return nil
@@ -672,29 +638,6 @@ func IsVersionGreaterThanOrEqual(ver1, ver2 string) (bool, error) {
 		return false, err
 	}
 	return v1.GreaterThanOrEqual(v2), nil
-}
-
-func sortVersions(list map[string]string) ([]*gover.Version, error) {
-	var versions []*gover.Version
-	for key := range list {
-		v, err := gover.NewVersion(key)
-		if err != nil {
-			return nil, err
-		}
-		versions = append(versions, v)
-	}
-
-	sort.Sort(gover.Collection(versions))
-	return versions, nil
-}
-
-func getLatestVersion(list map[string]string) (string, error) {
-	sorted, err := sortVersions(list)
-	if err != nil {
-		return "", err
-	}
-
-	return sorted[len(sorted)-1].Original(), nil
 }
 
 func structToMap(item interface{}) map[string]interface{} {

@@ -3,7 +3,6 @@ package rancher2
 import (
 	"context"
 	"fmt"
-	"strings"
 	"sync"
 	"time"
 
@@ -115,48 +114,6 @@ func (c *Config) waitForRancherLocalActive() error {
 	return err
 }
 
-func (c *Config) getK8SDefaultVersion() (string, error) {
-	if len(c.K8SDefaultVersion) > 0 {
-		return c.K8SDefaultVersion, nil
-	}
-	var err error
-	if c.Client.Management == nil {
-		_, err = c.ManagementClient()
-		if err != nil {
-			return "", err
-		}
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), c.Timeout)
-	defer cancel()
-	for {
-		k8sVer, err := c.Client.Management.Setting.ByID("k8s-version")
-		if err == nil {
-			c.K8SDefaultVersion = k8sVer.Value
-			return c.K8SDefaultVersion, nil
-		}
-		if !IsServerError(err) && !IsForbidden(err) {
-			return "", err
-		}
-		select {
-		case <-time.After(rancher2RetriesWait * time.Second):
-		case <-ctx.Done():
-			return "", err
-		}
-	}
-}
-
-// Fix breaking API change https://github.com/rancher/rancher/pull/23718
-func (c *Config) fixNodeTemplateID(id string) string {
-	if ok, _ := c.IsRancherVersionGreaterThanOrEqual(rancher2NodeTemplateChangeVersion); ok && len(id) > 0 {
-		if !strings.HasPrefix(id, rancher2NodeTemplateNewPrefix) {
-			id = strings.Replace(id, ":", "-", -1)
-			id = rancher2NodeTemplateNewPrefix + id
-		}
-	}
-	return id
-}
-
 func (c *Config) IsRancherVersionGreaterThanOrEqualAndLessThan(ver1, ver2 string) (bool, error) {
 	_, err := c.GetRancherVersion()
 	if err != nil {
@@ -246,11 +203,6 @@ func (c *Config) ManagementClient() (*managementClient.Client, error) {
 		return nil, err
 	}
 	c.Client.Management = mClient
-
-	rancher2ClusterRKEK8SDefaultVersion, err = c.getK8SDefaultVersion()
-	if err != nil {
-		return nil, err
-	}
 
 	return c.Client.Management, nil
 }

@@ -2,6 +2,7 @@ package rancher2
 
 import (
 	"fmt"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	managementClient "github.com/rancher/rancher/pkg/client/generated/management/v3"
 )
@@ -218,19 +219,6 @@ func flattenCluster(d *schema.ResourceData, in *Cluster, clusterRegToken *manage
 	if err != nil {
 		return err
 	}
-	v, ok := d.Get("rke_config").([]interface{})
-	if !ok {
-		v = []interface{}{}
-	}
-	rkeConfig, err := flattenClusterRKEConfig(in.RancherKubernetesEngineConfig, v)
-	if err != nil {
-		return err
-	}
-	err = d.Set("rke_config", rkeConfig)
-	if err != nil {
-		return err
-	}
-
 	d.Set("windows_prefered_cluster", in.WindowsPreferedCluster)
 
 	return nil
@@ -409,21 +397,6 @@ func expandCluster(in *schema.ResourceData) (*Cluster, error) {
 		obj.FleetAgentDeploymentCustomization = fleetAgentDeploymentCustomization
 	}
 
-	if v, ok := in.Get("cluster_template_id").(string); ok && len(v) > 0 {
-		obj.ClusterTemplateID = v
-		obj.Driver = clusterDriverRKE
-		if v, ok := in.Get("cluster_template_revision_id").(string); ok && len(v) > 0 {
-			obj.ClusterTemplateRevisionID = v
-			obj.Driver = clusterDriverRKE
-		}
-		if v, ok := in.Get("cluster_template_answers").([]interface{}); ok && len(v) > 0 {
-			obj.ClusterTemplateAnswers = expandAnswer(v)
-		}
-		if v, ok := in.Get("cluster_template_questions").([]interface{}); ok && len(v) > 0 {
-			obj.ClusterTemplateQuestions = expandQuestions(v)
-		}
-	}
-
 	if v, ok := in.Get("default_pod_security_admission_configuration_template_name").(string); ok && len(v) > 0 {
 		obj.DefaultPodSecurityAdmissionConfigurationTemplateName = v
 	}
@@ -490,15 +463,6 @@ func expandCluster(in *schema.ResourceData) (*Cluster, error) {
 	if v, ok := in.Get("k3s_config").([]interface{}); ok && len(v) > 0 {
 		obj.K3sConfig = expandClusterK3SConfig(v)
 		obj.Driver = clusterDriverK3S
-	}
-
-	if v, ok := in.Get("rke_config").([]interface{}); ok && len(v) > 0 {
-		rkeConfig, err := expandClusterRKEConfig(v, obj.Name)
-		if err != nil {
-			return nil, err
-		}
-		obj.RancherKubernetesEngineConfig = rkeConfig
-		obj.Driver = clusterDriverRKE
 	}
 
 	if v, ok := in.Get("rke2_config").([]interface{}); ok && len(v) > 0 {

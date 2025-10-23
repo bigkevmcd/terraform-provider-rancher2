@@ -24,7 +24,7 @@ func resourceRancher2Cluster() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: resourceRancher2ClusterImport,
 		},
-		CustomizeDiff: func(d *schema.ResourceDiff, i interface{}) error {
+		CustomizeDiff: func(d *schema.ResourceDiff, _ interface{}) error {
 			if d.Get("driver") == clusterDriverEKSV2 && d.HasChange("eks_config_v2") {
 				old, new := d.GetChange("eks_config_v2")
 				oldObj := expandClusterEKSConfigV2(old.([]interface{}))
@@ -162,7 +162,7 @@ func resourceRancher2ClusterCreate(d *schema.ResourceData, meta interface{}) err
 		expectedState = append(expectedState, "pending")
 	}
 
-	if cluster.Driver == clusterDriverRKE || cluster.Driver == clusterDriverK3S || cluster.Driver == clusterDriverRKE2 {
+	if cluster.Driver == clusterDriverK3S || cluster.Driver == clusterDriverRKE2 {
 		expectedState = append(expectedState, "provisioning")
 	}
 
@@ -189,8 +189,6 @@ func resourceRancher2ClusterCreate(d *schema.ResourceData, meta interface{}) err
 		clusterMap, _ := jsonToMapInterface(clusterStr)
 		clusterMap["gkeConfig"] = fixClusterGKEConfigV2(structToMap(cluster.GKEConfig))
 		err = client.APIBaseClient.Create(managementClient.ClusterType, clusterMap, newCluster)
-	} else if cluster.Driver == clusterDriverRKE {
-		return fmt.Errorf("[INFO] Rancher v2.12+ does not support RKE1. Please migrate clusters to RKE2 or K3s, or delete the related resources. More info: https://www.suse.com/c/rke-end-of-life-by-july-2025-replatform-to-rke2-or-k3s")
 	} else {
 		err = client.APIBaseClient.Create(managementClient.ClusterType, cluster, newCluster)
 	}
@@ -350,8 +348,6 @@ func resourceRancher2ClusterUpdate(d *schema.ResourceData, meta interface{}) err
 			return err
 		}
 		update["okeEngineConfig"] = okeConfig
-	case ToLower(clusterDriverRKE):
-		return fmt.Errorf("[INFO] Rancher v2.12+ does not support RKE1. Please migrate clusters to RKE2 or K3s, or delete the related resources. More info: https://www.suse.com/c/rke-end-of-life-by-july-2025-replatform-to-rke2-or-k3s")
 	case clusterDriverK3S:
 		update["k3sConfig"] = expandClusterK3SConfig(d.Get("k3s_config").([]interface{}))
 		replace = d.HasChange("cluster_agent_deployment_customization")
@@ -480,15 +476,6 @@ func clusterRegistrationTokenStateRefreshFunc(client *managementClient.Client, c
 		}
 		return obj, obj.State, nil
 	}
-}
-
-func findFlattenClusterRegistrationToken(client *managementClient.Client, clusterID string) ([]interface{}, error) {
-	clusterReg, err := findClusterRegistrationToken(client, clusterID)
-	if err != nil {
-		return []interface{}{}, err
-	}
-
-	return flattenClusterRegistrationToken(clusterReg)
 }
 
 func findClusterRegistrationToken(client *managementClient.Client, clusterID string) (*managementClient.ClusterRegistrationToken, error) {

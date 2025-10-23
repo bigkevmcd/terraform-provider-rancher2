@@ -57,7 +57,7 @@ func flattenClusterEKSConfigV2NodeGroups(input []managementClient.NodeGroup, p [
 		if in.InstanceType != nil && len(*in.InstanceType) > 0 {
 			obj["instance_type"] = *in.InstanceType
 		}
-		if in.Labels != nil && len(in.Labels) > 0 {
+		if len(in.Labels) > 0 {
 			obj["labels"] = toMapInterface(in.Labels)
 		}
 		if in.LaunchTemplate != nil {
@@ -75,16 +75,16 @@ func flattenClusterEKSConfigV2NodeGroups(input []managementClient.NodeGroup, p [
 		if in.RequestSpotInstances != nil {
 			obj["request_spot_instances"] = *in.RequestSpotInstances
 		}
-		if in.ResourceTags != nil && len(in.ResourceTags) > 0 {
+		if len(in.ResourceTags) > 0 {
 			obj["resource_tags"] = toMapInterface(in.ResourceTags)
 		}
-		if in.SpotInstanceTypes != nil && len(in.SpotInstanceTypes) > 0 {
+		if len(in.SpotInstanceTypes) > 0 {
 			obj["spot_instance_types"] = toArrayInterfaceSorted(in.SpotInstanceTypes)
 		}
-		if in.Subnets != nil && len(in.Subnets) > 0 {
+		if len(in.Subnets) > 0 {
 			obj["subnets"] = toArrayInterfaceSorted(in.Subnets)
 		}
-		if in.Tags != nil && len(in.Tags) > 0 {
+		if len(in.Tags) > 0 {
 			obj["tags"] = toMapInterface(in.Tags)
 		}
 		if in.UserData != nil && len(*in.UserData) > 0 {
@@ -118,7 +118,7 @@ func flattenClusterEKSConfigV2(in *managementClient.EKSClusterConfigSpec, p []in
 	if in.KubernetesVersion != nil && len(*in.KubernetesVersion) > 0 {
 		obj["kubernetes_version"] = *in.KubernetesVersion
 	}
-	if in.NodeGroups != nil && len(in.NodeGroups) > 0 {
+	if len(in.NodeGroups) > 0 {
 		v, ok := obj["node_groups"].([]interface{})
 		if !ok {
 			v = []interface{}{}
@@ -129,7 +129,7 @@ func flattenClusterEKSConfigV2(in *managementClient.EKSClusterConfigSpec, p []in
 	if in.KmsKey != nil && len(*in.KmsKey) > 0 {
 		obj["kms_key"] = *in.KmsKey
 	}
-	if in.LoggingTypes != nil && len(in.LoggingTypes) > 0 {
+	if len(in.LoggingTypes) > 0 {
 		obj["logging_types"] = toArrayInterfaceSorted(in.LoggingTypes)
 	}
 	if in.PrivateAccess != nil {
@@ -138,7 +138,7 @@ func flattenClusterEKSConfigV2(in *managementClient.EKSClusterConfigSpec, p []in
 	if in.PublicAccess != nil {
 		obj["public_access"] = *in.PublicAccess
 	}
-	if in.PublicAccessSources != nil && len(in.PublicAccessSources) > 0 {
+	if len(in.PublicAccessSources) > 0 {
 		obj["public_access_sources"] = toArrayInterfaceSorted(in.PublicAccessSources)
 	}
 	if in.SecretsEncryption != nil {
@@ -159,7 +159,7 @@ func flattenClusterEKSConfigV2(in *managementClient.EKSClusterConfigSpec, p []in
 	if in.Subnets != nil && len(in.Subnets) > 0 {
 		obj["subnets"] = toArrayInterfaceSorted(in.Subnets)
 	}
-	if in.Tags != nil && len(in.Tags) > 0 {
+	if len(in.Tags) > 0 {
 		obj["tags"] = toMapInterface(in.Tags)
 	}
 

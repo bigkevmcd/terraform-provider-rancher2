@@ -13,9 +13,7 @@ const (
 )
 
 var (
-	descriptions                        map[string]string
-	rancher2ClusterRKEK8SDefaultVersion string
-	rancher2ClusterRKEK8SVersions       []string
+	descriptions map[string]string
 )
 
 // CLIConfig used to store data from file.

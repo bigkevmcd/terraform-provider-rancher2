@@ -8,12 +8,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-const (
-	machineConfigV2Kind       = "MachineConfig"
-	machineConfigV2APIVersion = "rke-machine-config.cattle.io/v1"
-	machineConfigV2APIType    = "rke-machine-config.cattle.io"
-)
-
 //Types
 
 type machineConfigV2 struct {

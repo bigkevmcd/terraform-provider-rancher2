@@ -36,14 +36,6 @@ func dataSourceRancher2Cluster() *schema.Resource {
 				Computed:  true,
 				Sensitive: true,
 			},
-			"rke_config": {
-				Type:     schema.TypeList,
-				MaxItems: 1,
-				Computed: true,
-				Elem: &schema.Resource{
-					Schema: clusterRKEConfigFieldsData(),
-				},
-			},
 			"rke2_config": {
 				Type:     schema.TypeList,
 				MaxItems: 1,

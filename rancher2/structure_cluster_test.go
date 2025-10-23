@@ -26,22 +26,14 @@ var (
 	testClusterRegistrationToken2Conf                *managementClient.ClusterRegistrationToken
 	testClusterRegistrationTokenInterface            []interface{}
 	testClusterGenerateKubeConfigOutput              *managementClient.GenerateKubeConfigOutput
-	testClusterConfAKS                               *Cluster
-	testClusterInterfaceAKS                          map[string]interface{}
-	testClusterConfEKS                               *Cluster
-	testClusterInterfaceEKS                          map[string]interface{}
 	testClusterConfEKSV2                             *Cluster
 	testClusterInterfaceEKSV2                        map[string]interface{}
-	testClusterConfGKE                               *Cluster
-	testClusterInterfaceGKE                          map[string]interface{}
 	testClusterConfK3S                               *Cluster
 	testClusterInterfaceK3S                          map[string]interface{}
 	testClusterConfGKEV2                             *Cluster
 	testClusterInterfaceGKEV2                        map[string]interface{}
 	testClusterConfOKE                               *Cluster
 	testClusterInterfaceOKE                          map[string]interface{}
-	testClusterConfRKE                               *Cluster
-	testClusterInterfaceRKE                          map[string]interface{}
 	testClusterConfRKE2                              *Cluster
 	testClusterInterfaceRKE2                         map[string]interface{}
 	testClusterConfTemplate                          *Cluster
@@ -408,37 +400,6 @@ func testCluster() {
 		"oke_config":            testClusterOKEConfigInterface,
 		"system_project_id":     "system_project_id",
 	}
-	testClusterConfRKE = &Cluster{}
-	testClusterConfRKE.Name = "test"
-	testClusterConfRKE.Description = "description"
-	testClusterConfRKE.RancherKubernetesEngineConfig = testClusterRKEConfigConf
-	testClusterConfRKE.Driver = clusterDriverRKE
-	testClusterConfRKE.AgentEnvVars = testClusterEnvVarsConf
-	testClusterConfRKE.ClusterAgentDeploymentCustomization = testClusterAgentDeploymentCustomizationConf
-	testClusterConfRKE.FleetAgentDeploymentCustomization = testFleetAgentDeploymentCustomizationConf
-	testClusterConfRKE.DefaultPodSecurityAdmissionConfigurationTemplateName = "default_pod_security_admission_configuration_template_name"
-	testClusterConfRKE.FleetWorkspaceName = "fleet-test"
-	testClusterConfRKE.EnableNetworkPolicy = newTrue()
-	testClusterConfRKE.LocalClusterAuthEndpoint = testLocalClusterAuthEndpointConf
-	testClusterInterfaceRKE = map[string]interface{}{
-		"id":                                     "id",
-		"name":                                   "test",
-		"agent_env_vars":                         testClusterEnvVarsInterface,
-		"cluster_agent_deployment_customization": testClusterAgentDeploymentCustomizationInterface,
-		"fleet_agent_deployment_customization":   testFleetAgentDeploymentCustomizationInterface,
-		"default_project_id":                     "default_project_id",
-		"description":                            "description",
-		"cluster_auth_endpoint":                  testLocalClusterAuthEndpointInterface,
-		"cluster_registration_token":             testClusterRegistrationTokenInterface,
-		"default_pod_security_admission_configuration_template_name": "default_pod_security_admission_configuration_template_name",
-		"enable_network_policy":    true,
-		"fleet_workspace_name":     "fleet-test",
-		"kube_config":              "kube_config",
-		"driver":                   clusterDriverRKE,
-		"rke_config":               testClusterRKEConfigInterface,
-		"system_project_id":        "system_project_id",
-		"windows_prefered_cluster": false,
-	}
 	testClusterConfRKE2 = &Cluster{}
 	testClusterConfRKE2.Name = "test"
 	testClusterConfRKE2.Description = "description"
@@ -468,18 +429,6 @@ func testCluster() {
 		"system_project_id":        "system_project_id",
 		"windows_prefered_cluster": false,
 	}
-	testClusterConfTemplate = &Cluster{}
-	testClusterConfTemplate.Name = "test"
-	testClusterConfTemplate.Description = "description"
-	testClusterConfTemplate.ClusterTemplateAnswers = testClusterAnswersConf
-	testClusterConfTemplate.ClusterTemplateID = "cluster_template_id"
-	testClusterConfTemplate.ClusterTemplateQuestions = testClusterQuestionsConf
-	testClusterConfTemplate.ClusterTemplateRevisionID = "cluster_template_revision_id"
-	testClusterConfTemplate.Driver = clusterDriverRKE
-	testClusterConfTemplate.AgentEnvVars = testClusterEnvVarsConf
-	testClusterConfTemplate.DefaultPodSecurityAdmissionConfigurationTemplateName = "default_pod_security_admission_configuration_template_name"
-	testClusterConfTemplate.EnableNetworkPolicy = newTrue()
-	testClusterConfTemplate.LocalClusterAuthEndpoint = testLocalClusterAuthEndpointConf
 	testClusterInterfaceTemplate = map[string]interface{}{
 		"id":                         "id",
 		"name":                       "test",
@@ -491,7 +440,7 @@ func testCluster() {
 		"default_pod_security_admission_configuration_template_name": "default_pod_security_admission_configuration_template_name",
 		"enable_network_policy":        true,
 		"kube_config":                  "kube_config",
-		"driver":                       clusterDriverRKE,
+		"driver":                       clusterDriverRKE2,
 		"cluster_template_answers":     testClusterAnswersInterface,
 		"cluster_template_id":          "cluster_template_id",
 		"cluster_template_questions":   testClusterQuestionsInterface,
@@ -550,12 +499,6 @@ func TestFlattenCluster(t *testing.T) {
 			testClusterInterfaceOKE,
 		},
 		{
-			testClusterConfRKE,
-			testClusterRegistrationTokenConf,
-			testClusterGenerateKubeConfigOutput,
-			testClusterInterfaceRKE,
-		},
-		{
 			testClusterConfRKE2,
 			testClusterRegistrationTokenConf,
 			testClusterGenerateKubeConfigOutput,
@@ -580,9 +523,6 @@ func TestFlattenCluster(t *testing.T) {
 		for k := range tc.ExpectedOutput {
 			expectedOutput[k] = output.Get(k)
 
-		}
-		if tc.ExpectedOutput["driver"] == clusterDriverRKE {
-			expectedOutput["rke_config"], _ = flattenClusterRKEConfig(tc.Input.RancherKubernetesEngineConfig, []interface{}{})
 		}
 		if tc.ExpectedOutput["cluster_agent_deployment_customization"] != nil {
 			expectedOutput["cluster_agent_deployment_customization"] = flattenAgentDeploymentCustomization(tc.Input.ClusterAgentDeploymentCustomization, true)
@@ -639,10 +579,6 @@ func TestExpandCluster(t *testing.T) {
 		{
 			testClusterInterfaceOKE,
 			testClusterConfOKE,
-		},
-		{
-			testClusterInterfaceRKE,
-			testClusterConfRKE,
 		},
 		{
 			testClusterInterfaceRKE2,
@@ -714,9 +650,6 @@ func TestFlattenClusterWithPreservedClusterTemplateAnswers(t *testing.T) {
 		for k := range tc.ExpectedOutput {
 			expectedOutput[k] = output.Get(k)
 
-		}
-		if tc.ExpectedOutput["driver"] == clusterDriverRKE {
-			expectedOutput["rke_config"], _ = flattenClusterRKEConfig(tc.Input.RancherKubernetesEngineConfig, []interface{}{})
 		}
 		expectedOutput["id"] = "id"
 

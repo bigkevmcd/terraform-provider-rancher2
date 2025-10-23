@@ -2,7 +2,7 @@ package rancher2
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	storageV1 "k8s.io/api/storage/v1"
 )
 
@@ -35,7 +35,7 @@ func flattenStorageClassV2(d *schema.ResourceData, in *StorageClassV2) error {
 	if err != nil {
 		return err
 	}
-	if in.Parameters != nil && len(in.Parameters) > 0 {
+	if len(in.Parameters) > 0 {
 		d.Set("parameters", toMapInterface(in.Parameters))
 		if err != nil {
 			return err
