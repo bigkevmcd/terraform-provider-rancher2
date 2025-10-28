@@ -58,7 +58,7 @@ func flattenClusterV2RKEConfigUpgradeStrategy(in rkev1.ClusterUpgradeStrategy) [
 // Expanders
 
 func expandClusterV2RKEConfigUpgradeStrategyDrainOptions(p []interface{}) rkev1.DrainOptions {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return rkev1.DrainOptions{}
 	}
 
@@ -98,7 +98,7 @@ func expandClusterV2RKEConfigUpgradeStrategyDrainOptions(p []interface{}) rkev1.
 }
 
 func expandClusterV2RKEConfigUpgradeStrategy(p []interface{}) rkev1.ClusterUpgradeStrategy {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return rkev1.ClusterUpgradeStrategy{}
 	}
 

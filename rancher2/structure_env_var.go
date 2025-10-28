@@ -7,7 +7,7 @@ import (
 // Flatteners
 
 func flattenEnvVars(p []managementClient.EnvVar) []interface{} {
-	if p == nil || len(p) == 0 {
+	if len(p) == 0 {
 		return nil
 	}
 
@@ -32,7 +32,7 @@ func flattenEnvVars(p []managementClient.EnvVar) []interface{} {
 // Expanders
 
 func expandEnvVars(p []interface{}) []managementClient.EnvVar {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

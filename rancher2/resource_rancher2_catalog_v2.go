@@ -354,9 +354,7 @@ func waitAllCatalogV2Downloaded(c *Config, clusterID string) ([]ClusterRepo, err
 		return nil, fmt.Errorf("[ERROR] getting catalog V2 list at cluster ID (%s): %s", clusterID, err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), c.Timeout)
-	defer cancel()
-	g, ctx := errgroup.WithContext(ctx)
+	g := errgroup.Group{}
 	for _, clusterRepo := range clusterRepos {
 		repoID := clusterRepo.ID
 		g.Go(func() error {

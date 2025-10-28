@@ -114,7 +114,7 @@ func flattenMachineConfigV2Harvester(in *MachineConfigV2Harvester) []interface{}
 // Expanders
 
 func expandMachineConfigV2Harvester(p []interface{}, source *MachineConfigV2) *MachineConfigV2Harvester {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 	obj := &MachineConfigV2Harvester{}

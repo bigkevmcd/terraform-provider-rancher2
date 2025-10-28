@@ -27,7 +27,7 @@ func flattenPodDisruptionBudget(in *v3.PodDisruptionBudgetSpec) []interface{} {
 // Expanders
 
 func expandPodDisruptionBudget(p []interface{}) *v3.PodDisruptionBudgetSpec {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

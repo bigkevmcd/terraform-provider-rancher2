@@ -53,7 +53,7 @@ func flattenMachineConfigV2Digitalocean(in *MachineConfigV2Digitalocean) []inter
 
 	obj["backups"] = in.Backups
 
-	if len(in.Image) > 0 {
+	if in.Image != "" {
 		obj["image"] = in.Image
 	}
 
@@ -61,35 +61,35 @@ func flattenMachineConfigV2Digitalocean(in *MachineConfigV2Digitalocean) []inter
 	obj["monitoring"] = in.Monitoring
 	obj["private_networking"] = in.PrivateNetworking
 
-	if len(in.Region) > 0 {
+	if in.Region != "" {
 		obj["region"] = in.Region
 	}
 
-	if len(in.Size) > 0 {
+	if in.Size != "" {
 		obj["size"] = in.Size
 	}
 
-	if len(in.SSHKeyContents) > 0 {
+	if in.SSHKeyContents != "" {
 		obj["ssh_key_contents"] = in.SSHKeyContents
 	}
 
-	if len(in.SSHKeyFingerprint) > 0 {
+	if in.SSHKeyFingerprint != "" {
 		obj["ssh_key_fingerprint"] = in.SSHKeyFingerprint
 	}
 
-	if len(in.SSHPort) > 0 {
+	if in.SSHPort != "" {
 		obj["ssh_port"] = in.SSHPort
 	}
 
-	if len(in.SSHUser) > 0 {
+	if in.SSHUser != "" {
 		obj["ssh_user"] = in.SSHUser
 	}
 
-	if len(in.Tags) > 0 {
+	if in.Tags != "" {
 		obj["tags"] = in.Tags
 	}
 
-	if len(in.Userdata) > 0 {
+	if in.Userdata != "" {
 		obj["userdata"] = in.Userdata
 	}
 
@@ -99,7 +99,7 @@ func flattenMachineConfigV2Digitalocean(in *MachineConfigV2Digitalocean) []inter
 // Expanders
 
 func expandMachineConfigV2Digitalocean(p []interface{}, source *MachineConfigV2) *MachineConfigV2Digitalocean {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 	obj := &MachineConfigV2Digitalocean{}

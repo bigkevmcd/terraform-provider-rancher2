@@ -28,16 +28,16 @@ func flattenClusterV2RKEConfig(in *provisionv1.RKEConfig) []interface{} {
 		yamlData, _ := interfaceToGhodssyaml(in.MachineGlobalConfig.Data)
 		obj["machine_global_config"] = yamlData
 	}
-	if in.MachinePools != nil && len(in.MachinePools) > 0 {
+	if len(in.MachinePools) > 0 {
 		obj["machine_pools"] = flattenClusterV2RKEConfigMachinePools(in.MachinePools)
 	}
 
 	obj["machine_pool_defaults"] = flattenClusterV2RKEConfigMachinePoolDefaults(in.MachinePoolDefaults)
 
-	if in.MachineSelectorConfig != nil && len(in.MachineSelectorConfig) > 0 {
+	if len(in.MachineSelectorConfig) > 0 {
 		obj["machine_selector_config"] = flattenClusterV2RKEConfigSystemConfig(in.MachineSelectorConfig)
 	}
-	if in.MachineSelectorFiles != nil && len(in.MachineSelectorFiles) > 0 {
+	if len(in.MachineSelectorFiles) > 0 {
 		obj["machine_selector_files"] = flattenClusterV2RKEConfigMachineSelectorFiles(in.MachineSelectorFiles)
 	}
 	if in.Registries != nil {
@@ -64,7 +64,7 @@ func flattenClusterV2RKEConfig(in *provisionv1.RKEConfig) []interface{} {
 
 func expandClusterV2RKEConfig(p []interface{}) *provisionv1.RKEConfig {
 	obj := &provisionv1.RKEConfig{}
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return obj
 	}
 

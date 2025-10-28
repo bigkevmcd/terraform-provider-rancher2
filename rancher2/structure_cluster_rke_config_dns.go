@@ -80,7 +80,7 @@ func flattenClusterRKEConfigDNS(in *managementClient.DNSConfig) ([]interface{}, 
 		obj["reverse_cidrs"] = toArrayInterface(in.ReverseCIDRs)
 	}
 
-	if in.Tolerations != nil && len(in.Tolerations) > 0 {
+	if len(in.Tolerations) > 0 {
 		obj["tolerations"] = flattenTolerations(in.Tolerations)
 	}
 

@@ -23,7 +23,7 @@ func flattenAgentSchedulingCustomization(in *v3.AgentSchedulingCustomization) []
 }
 
 func expandAgentSchedulingCustomization(p []interface{}) *v3.AgentSchedulingCustomization {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

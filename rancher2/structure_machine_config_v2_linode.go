@@ -117,7 +117,7 @@ func flattenMachineConfigV2Linode(in *MachineConfigV2Linode) []interface{} {
 // Expanders
 
 func expandMachineConfigV2Linode(p []interface{}, source *MachineConfigV2) *MachineConfigV2Linode {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 	obj := &MachineConfigV2Linode{}

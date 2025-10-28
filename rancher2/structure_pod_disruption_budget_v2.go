@@ -1,7 +1,7 @@
 package rancher2
 
 import (
-	"github.com/rancher/rancher/pkg/apis/provisioning.cattle.io/v1"
+	v1 "github.com/rancher/rancher/pkg/apis/provisioning.cattle.io/v1"
 )
 
 // Flatteners
@@ -27,7 +27,7 @@ func flattenPodDisruptionBudgetV2(in *v1.PodDisruptionBudgetSpec) []interface{} 
 // Expanders
 
 func expandPodDisruptionBudgetV2(p []interface{}) *v1.PodDisruptionBudgetSpec {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

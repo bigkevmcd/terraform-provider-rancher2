@@ -134,7 +134,7 @@ func resourceRancher2AuthConfigActiveDirectoryDelete(d *schema.ResourceData, met
 		return err
 	}
 
-	if auth.Enabled == true {
+	if auth.Enabled {
 		err = client.Post(auth.Actions["disable"], nil, nil)
 		if err != nil {
 			return fmt.Errorf("[ERROR] Disabling Auth Config %s: %s", AuthConfigActiveDirectoryName, err)

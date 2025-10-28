@@ -181,7 +181,7 @@ func flattenMachineConfigV2Azure(in *MachineConfigV2Azure) []interface{} {
 // Expanders
 
 func expandMachineConfigV2Azure(p []interface{}, source *MachineConfigV2) *MachineConfigV2Azure {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 	obj := &MachineConfigV2Azure{}

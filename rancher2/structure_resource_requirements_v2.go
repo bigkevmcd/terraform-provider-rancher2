@@ -48,7 +48,7 @@ func flattenResourceRequirementsV2(in *corev1.ResourceRequirements) []interface{
 // Expanders
 
 func expandResourceRequirementsV2(p []interface{}) (*corev1.ResourceRequirements, error) {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil, nil
 	}
 

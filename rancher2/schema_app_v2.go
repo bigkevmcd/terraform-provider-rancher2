@@ -141,12 +141,12 @@ func appV2Fields() map[string]*schema.Schema {
 
 func validateAppSchema(val interface{}, key string) (warns []string, errs []error) {
 	v, ok := val.(string)
-	if !ok || len(v) == 0 {
+	if !ok || v == "" {
 		return
 	}
 	_, err := ghodssyamlToMapInterface(v)
 	if err != nil {
-		errs = append(errs, fmt.Errorf("[ERROR] %q must be in YAML format, error: %v", key, err))
+		errs = append(errs, fmt.Errorf("%q must be in YAML format, error: %v", key, err))
 		return
 	}
 	return

@@ -109,7 +109,7 @@ func resourceRancher2AuthConfigGithubDelete(d *schema.ResourceData, meta interfa
 		return err
 	}
 
-	if auth.Enabled == true {
+	if auth.Enabled {
 		err = client.Post(auth.Actions["disable"], nil, nil)
 		if err != nil {
 			return fmt.Errorf("[ERROR] Disabling Auth Config %s: %s", AuthConfigGithubName, err)

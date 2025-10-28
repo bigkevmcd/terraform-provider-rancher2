@@ -21,7 +21,7 @@ func flattenClusterV2RKEConfigRotateCertificates(in *rkev1.RotateCertificates) [
 }
 
 func expandClusterV2RKEConfigRotateCertificates(p []interface{}) *rkev1.RotateCertificates {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

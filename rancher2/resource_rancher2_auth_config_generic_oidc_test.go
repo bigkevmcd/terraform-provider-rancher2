@@ -83,7 +83,7 @@ func testAccCheckRancher2AuthConfigGenericOIDCDisabled(s *terraform.State) error
 		return err
 	}
 
-	if auth.Enabled == true {
+	if auth.Enabled {
 		return fmt.Errorf("Auth Config %s is still enabled", AuthConfigGenericOIDCName)
 	}
 

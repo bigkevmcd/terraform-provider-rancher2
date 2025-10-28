@@ -36,7 +36,7 @@ func flattenResourceRequirements(in *managementClient.ResourceRequirements) []in
 // Expanders
 
 func expandResourceRequirements(p []interface{}) *managementClient.ResourceRequirements {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

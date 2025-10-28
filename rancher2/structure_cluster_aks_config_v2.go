@@ -62,10 +62,10 @@ func flattenClusterAKSConfigV2NodePools(input []managementClient.AKSNodePool, p 
 		if len(in.MaxSurge) > 0 {
 			obj["max_surge"] = in.MaxSurge
 		}
-		if in.NodeLabels != nil && len(in.NodeLabels) > 0 {
+		if len(in.NodeLabels) > 0 {
 			obj["labels"] = toMapInterface(in.NodeLabels)
 		}
-		if in.NodeTaints != nil && len(in.NodeTaints) > 0 {
+		if len(in.NodeTaints) > 0 {
 			obj["taints"] = toArrayInterface(in.NodeTaints)
 		}
 		out[i] = obj
@@ -153,10 +153,10 @@ func flattenClusterAKSConfigV2(in *managementClient.AKSClusterConfigSpec, p []in
 	if in.NetworkPolicy != nil && len(*in.NetworkPolicy) > 0 {
 		obj["network_policy"] = *in.NetworkPolicy
 	}
-	if in.NetworkServiceCIDR != nil && len(*in.NetworkServiceCIDR) > 0 {
+	if len(*in.NetworkServiceCIDR) > 0 {
 		obj["network_service_cidr"] = *in.NetworkServiceCIDR
 	}
-	if in.NodePools != nil && len(in.NodePools) > 0 {
+	if len(in.NodePools) > 0 {
 		v, ok := obj["node_pools"].([]interface{})
 		if !ok {
 			v = []interface{}{}
@@ -191,7 +191,7 @@ func flattenClusterAKSConfigV2(in *managementClient.AKSClusterConfigSpec, p []in
 // Expanders
 
 func expandClusterAKSConfigV2NodePools(p []interface{}) []managementClient.AKSNodePool {
-	if p == nil || len(p) == 0 {
+	if len(p) == 0 {
 		return []managementClient.AKSNodePool{}
 	}
 	out := make([]managementClient.AKSNodePool, len(p))

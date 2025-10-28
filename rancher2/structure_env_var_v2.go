@@ -7,7 +7,7 @@ import (
 // Flatteners
 
 func flattenEnvVarsV2(p []rkev1.EnvVar) []interface{} {
-	if p == nil || len(p) == 0 {
+	if len(p) == 0 {
 		return nil
 	}
 
@@ -32,7 +32,7 @@ func flattenEnvVarsV2(p []rkev1.EnvVar) []interface{} {
 // Expanders
 
 func expandEnvVarsV2(p []interface{}) []rkev1.EnvVar {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

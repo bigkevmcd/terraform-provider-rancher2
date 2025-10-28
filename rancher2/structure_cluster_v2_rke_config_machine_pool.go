@@ -114,7 +114,7 @@ func flattenClusterV2RKEConfigMachinePools(p []provisionv1.RKEMachinePool) []int
 // Expanders
 
 func expandClusterV2RKEConfigMachinePoolMachineConfig(p []interface{}) *corev1.ObjectReference {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -136,7 +136,7 @@ func expandClusterV2RKEConfigMachinePoolMachineConfig(p []interface{}) *corev1.O
 }
 
 func expandClusterV2RKEConfigMachinePoolRollingUpdate(p []interface{}) *provisionv1.RKEMachinePoolRollingUpdate {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -157,7 +157,7 @@ func expandClusterV2RKEConfigMachinePoolRollingUpdate(p []interface{}) *provisio
 }
 
 func expandClusterV2RKEConfigMachinePools(p []interface{}) []provisionv1.RKEMachinePool {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

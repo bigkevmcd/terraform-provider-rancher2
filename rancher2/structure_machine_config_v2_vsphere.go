@@ -172,7 +172,7 @@ func flattenMachineConfigV2Vmwarevsphere(in *MachineConfigV2Vmwarevsphere) []int
 // Expanders
 
 func expandMachineConfigV2Vmwarevsphere(p []interface{}, source *MachineConfigV2) *MachineConfigV2Vmwarevsphere {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 	obj := &MachineConfigV2Vmwarevsphere{}

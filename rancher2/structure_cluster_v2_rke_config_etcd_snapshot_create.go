@@ -17,7 +17,7 @@ func flattenClusterV2RKEConfigETCDSnapshotCreate(in *rkev1.ETCDSnapshotCreate) [
 }
 
 func expandClusterV2RKEConfigETCDSnapshotCreate(p []interface{}) *rkev1.ETCDSnapshotCreate {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

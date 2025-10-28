@@ -13,22 +13,22 @@ func flattenClusterV2RKEConfigETCDSnapshotS3(in *rkev1.ETCDSnapshotS3) []interfa
 
 	obj := make(map[string]interface{})
 
-	if len(in.Bucket) > 0 {
+	if in.Bucket != "" {
 		obj["bucket"] = in.Bucket
 	}
-	if len(in.CloudCredentialName) > 0 {
+	if in.CloudCredentialName != "" {
 		obj["cloud_credential_name"] = in.CloudCredentialName
 	}
-	if len(in.Endpoint) > 0 {
+	if in.Endpoint != "" {
 		obj["endpoint"] = in.Endpoint
 	}
-	if len(in.EndpointCA) > 0 {
+	if in.EndpointCA != "" {
 		obj["endpoint_ca"] = in.EndpointCA
 	}
-	if len(in.Folder) > 0 {
+	if in.Folder != "" {
 		obj["folder"] = in.Folder
 	}
-	if len(in.Region) > 0 {
+	if in.Region != "" {
 		obj["region"] = in.Region
 	}
 	obj["skip_ssl_verify"] = in.SkipSSLVerify
@@ -61,7 +61,7 @@ func flattenClusterV2RKEConfigETCD(in *rkev1.ETCD) []interface{} {
 // Expanders
 
 func expandClusterV2RKEConfigETCDSnapshotS3(p []interface{}) *rkev1.ETCDSnapshotS3 {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -69,22 +69,22 @@ func expandClusterV2RKEConfigETCDSnapshotS3(p []interface{}) *rkev1.ETCDSnapshot
 
 	in := p[0].(map[string]interface{})
 
-	if v, ok := in["bucket"].(string); ok && len(v) > 0 {
+	if v, ok := in["bucket"].(string); ok && v != "" {
 		obj.Bucket = v
 	}
-	if v, ok := in["cloud_credential_name"].(string); ok && len(v) > 0 {
+	if v, ok := in["cloud_credential_name"].(string); ok && v != "" {
 		obj.CloudCredentialName = v
 	}
-	if v, ok := in["endpoint"].(string); ok && len(v) > 0 {
+	if v, ok := in["endpoint"].(string); ok && v != "" {
 		obj.Endpoint = v
 	}
-	if v, ok := in["endpoint_ca"].(string); ok && len(v) > 0 {
+	if v, ok := in["endpoint_ca"].(string); ok && v != "" {
 		obj.EndpointCA = v
 	}
-	if v, ok := in["folder"].(string); ok && len(v) > 0 {
+	if v, ok := in["folder"].(string); ok && v != "" {
 		obj.Folder = v
 	}
-	if v, ok := in["region"].(string); ok && len(v) > 0 {
+	if v, ok := in["region"].(string); ok && v != "" {
 		obj.Region = v
 	}
 	obj.SkipSSLVerify = in["skip_ssl_verify"].(bool)
@@ -93,7 +93,7 @@ func expandClusterV2RKEConfigETCDSnapshotS3(p []interface{}) *rkev1.ETCDSnapshot
 }
 
 func expandClusterV2RKEConfigETCD(p []interface{}) *rkev1.ETCD {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -103,7 +103,7 @@ func expandClusterV2RKEConfigETCD(p []interface{}) *rkev1.ETCD {
 
 	obj.DisableSnapshots = in["disable_snapshots"].(bool)
 
-	if v, ok := in["snapshot_schedule_cron"].(string); ok && len(v) > 0 {
+	if v, ok := in["snapshot_schedule_cron"].(string); ok && v != "" {
 		obj.SnapshotScheduleCron = v
 	}
 	if v, ok := in["snapshot_retention"].(int); ok && v > 0 {

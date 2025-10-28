@@ -150,13 +150,13 @@ func flattenClusterEKSConfigV2(in *managementClient.EKSClusterConfigSpec, p []in
 	if in.SecretsEncryption != nil {
 		obj["secrets_encryption"] = *in.SecretsEncryption
 	}
-	if in.SecurityGroups != nil && len(in.SecurityGroups) > 0 {
+	if len(in.SecurityGroups) > 0 {
 		obj["security_groups"] = toArrayInterfaceSorted(in.SecurityGroups)
 	}
 	if in.ServiceRole != nil && len(*in.ServiceRole) > 0 {
 		obj["service_role"] = *in.ServiceRole
 	}
-	if in.Subnets != nil && len(in.Subnets) > 0 {
+	if len(in.Subnets) > 0 {
 		obj["subnets"] = toArrayInterfaceSorted(in.Subnets)
 	}
 	if len(in.Tags) > 0 {
@@ -189,7 +189,7 @@ func expandClusterEKSConfigV2NodeGroupsLaunchTemplate(p []interface{}) *manageme
 }
 
 func expandClusterEKSConfigV2NodeGroups(p []interface{}, subnets []string, version string) []managementClient.NodeGroup {
-	if p == nil || len(p) == 0 {
+	if len(p) == 0 {
 		return []managementClient.NodeGroup{}
 	}
 	out := make([]managementClient.NodeGroup, len(p))

@@ -137,7 +137,7 @@ func flattenMachineConfigV2GoogleGCE(in *MachineConfigV2GoogleGCE) []interface{}
 }
 
 func expandMachineConfigV2GoogleGCE(p []interface{}, source *MachineConfigV2) *MachineConfigV2GoogleGCE {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

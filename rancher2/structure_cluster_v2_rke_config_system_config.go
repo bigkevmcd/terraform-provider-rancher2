@@ -151,7 +151,7 @@ func flattenClusterV2RKEConfigKeyToPath(p []rkev1.KeyToPath) []interface{} {
 // Expanders
 
 func expandClusterV2RKEConfigSystemConfigLabelSelectorExpression(p []interface{}) []metav1.LabelSelectorRequirement {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -176,7 +176,7 @@ func expandClusterV2RKEConfigSystemConfigLabelSelectorExpression(p []interface{}
 }
 
 func expandClusterV2RKEConfigSystemConfigLabelSelector(p []interface{}) *metav1.LabelSelector {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if p[0] == nil {
 		return nil
 	}
 	obj := &metav1.LabelSelector{}
@@ -194,7 +194,7 @@ func expandClusterV2RKEConfigSystemConfigLabelSelector(p []interface{}) *metav1.
 }
 
 func expandClusterV2RKEConfigSystemConfig(p []interface{}) []rkev1.RKESystemConfig {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -217,7 +217,7 @@ func expandClusterV2RKEConfigSystemConfig(p []interface{}) []rkev1.RKESystemConf
 }
 
 func expandClusterV2RKEConfigProvisioningFiles(p []interface{}) []rkev1.RKEProvisioningFiles {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -239,7 +239,7 @@ func expandClusterV2RKEConfigProvisioningFiles(p []interface{}) []rkev1.RKEProvi
 }
 
 func expandClusterV2RKEConfigFileSources(p []interface{}) []rkev1.ProvisioningFileSource {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -262,7 +262,7 @@ func expandClusterV2RKEConfigFileSources(p []interface{}) []rkev1.ProvisioningFi
 
 func expandClusterV2RKEConfigK8sObjectFileSource(p []interface{}) rkev1.K8sObjectFileSource {
 	obj := rkev1.K8sObjectFileSource{}
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return obj
 	}
 
@@ -281,7 +281,7 @@ func expandClusterV2RKEConfigK8sObjectFileSource(p []interface{}) rkev1.K8sObjec
 }
 
 func expandClusterV2RKEConfigKeyToPath(p []interface{}) []rkev1.KeyToPath {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -290,19 +290,19 @@ func expandClusterV2RKEConfigKeyToPath(p []interface{}) []rkev1.KeyToPath {
 		in := p[i].(map[string]interface{})
 		obj := rkev1.KeyToPath{}
 
-		if v, ok := in["key"].(string); ok && len(v) > 0 {
+		if v, ok := in["key"].(string); ok && v != "" {
 			obj.Key = v
 		}
-		if v, ok := in["path"].(string); ok && len(v) > 0 {
+		if v, ok := in["path"].(string); ok && v != "" {
 			obj.Path = v
 		}
 		if v, ok := in["dynamic"].(bool); ok {
 			obj.Dynamic = v
 		}
-		if v, ok := in["permissions"].(string); ok && len(v) > 0 {
+		if v, ok := in["permissions"].(string); ok && v != "" {
 			obj.Permissions = v
 		}
-		if v, ok := in["hash"].(string); ok && len(v) > 0 {
+		if v, ok := in["hash"].(string); ok && v != "" {
 			obj.Hash = v
 		}
 		out[i] = obj

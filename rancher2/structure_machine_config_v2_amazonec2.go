@@ -165,15 +165,15 @@ func flattenMachineConfigV2Amazonec2(in *MachineConfigV2Amazonec2) []interface{}
 		obj["userdata"] = in.Userdata
 	}
 
-	if len(in.VolumeType) > 0 {
+	if in.VolumeType != "" {
 		obj["volume_type"] = in.VolumeType
 	}
 
-	if len(in.VpcID) > 0 {
+	if in.VpcID != "" {
 		obj["vpc_id"] = in.VpcID
 	}
 
-	if len(in.Zone) > 0 {
+	if in.Zone != "" {
 		obj["zone"] = in.Zone
 	}
 
@@ -183,12 +183,12 @@ func flattenMachineConfigV2Amazonec2(in *MachineConfigV2Amazonec2) []interface{}
 // Expanders
 
 func expandMachineConfigV2Amazonec2(p []interface{}, source *MachineConfigV2) *MachineConfigV2Amazonec2 {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 	obj := &MachineConfigV2Amazonec2{}
 
-	if len(source.ID) > 0 {
+	if source.ID != "" {
 		obj.ID = source.ID
 	}
 	in := p[0].(map[string]interface{})

@@ -131,7 +131,7 @@ func resourceRancher2AuthConfigFreeIpaDelete(d *schema.ResourceData, meta interf
 		return err
 	}
 
-	if auth.Enabled == true {
+	if auth.Enabled {
 		err = client.Post(auth.Actions["disable"], nil, nil)
 		if err != nil {
 			return fmt.Errorf("[ERROR] Disabling Auth Config %s: %s", AuthConfigFreeIpaName, err)

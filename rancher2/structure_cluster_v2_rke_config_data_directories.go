@@ -23,7 +23,7 @@ func flattenClusterV2RKEConfigDataDirectories(in rkev1.DataDirectories) []any {
 func expandClusterV2RKEConfigDataDirectories(p []any) rkev1.DataDirectories {
 	obj := rkev1.DataDirectories{}
 
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return obj
 	}
 

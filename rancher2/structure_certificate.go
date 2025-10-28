@@ -229,7 +229,7 @@ func expandCertificateData(input map[string]interface{}) error {
 	input[projectClient.NamespacedCertificateFieldKeySize] = strconv.Itoa(key.Size())
 	input[projectClient.NamespacedCertificateFieldSerialNumber] = certificate.SerialNumber.String()
 	var altNames []string
-	if certificate.DNSNames != nil && len(certificate.DNSNames) > 0 {
+	if len(certificate.DNSNames) > 0 {
 		altNames = certificate.DNSNames
 	}
 	for i := range certificate.IPAddresses {

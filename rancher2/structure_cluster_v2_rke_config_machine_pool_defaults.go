@@ -23,7 +23,7 @@ func flattenClusterV2RKEConfigMachinePoolDefaults(in provisionv1.RKEMachinePoolD
 // Expanders
 
 func expandClusterV2RKEConfigMachinePoolDefaults(d []any) provisionv1.RKEMachinePoolDefaults {
-	if d == nil || len(d) == 0 || d[0] == nil {
+	if len(d) == 0 || d[0] == nil {
 		return provisionv1.RKEMachinePoolDefaults{}
 	}
 

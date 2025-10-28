@@ -91,7 +91,7 @@ func flattenClusterV2RKEConfigRegistry(in *rkev1.Registry) []interface{} {
 // Expanders
 
 func expandClusterV2RKEConfigRegistryConfigs(p []interface{}) map[string]rkev1.RegistryConfig {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -119,7 +119,7 @@ func expandClusterV2RKEConfigRegistryConfigs(p []interface{}) map[string]rkev1.R
 }
 
 func expandClusterV2RKEConfigRegistryMirrors(p []interface{}) map[string]rkev1.Mirror {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 
@@ -141,7 +141,7 @@ func expandClusterV2RKEConfigRegistryMirrors(p []interface{}) map[string]rkev1.M
 }
 
 func expandClusterV2RKEConfigRegistry(p []interface{}) *rkev1.Registry {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

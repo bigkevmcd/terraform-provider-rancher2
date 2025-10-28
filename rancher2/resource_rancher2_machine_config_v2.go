@@ -30,7 +30,7 @@ func resourceRancher2MachineConfigV2Create(d *schema.ResourceData, meta interfac
 	name := d.Get("name").(string)
 	obj := expandMachineConfigV2(d)
 
-	log.Printf("[INFO] Creating Machine Config V2 %s kind %s", name, obj.TypeMeta.Kind)
+	log.Printf("[INFO] Creating Machine Config V2 %s kind %s", name, obj.Kind)
 
 	newObj, err := createMachineConfigV2(meta.(*Config), obj)
 	if err != nil {
@@ -135,7 +135,7 @@ func resourceRancher2MachineConfigV2Delete(d *schema.ResourceData, meta interfac
 	stateConf := &resource.StateChangeConf{
 		Pending:    []string{},
 		Target:     []string{"removed"},
-		Refresh:    machineConfigV2StateRefreshFunc(meta, obj.ID, obj.TypeMeta.Kind),
+		Refresh:    machineConfigV2StateRefreshFunc(meta, obj.ID, obj.Kind),
 		Timeout:    d.Timeout(schema.TimeoutDelete),
 		Delay:      1 * time.Second,
 		MinTimeout: 3 * time.Second,
@@ -176,7 +176,7 @@ func createMachineConfigV2(c *Config, obj *MachineConfigV2) (*MachineConfigV2, e
 	}
 	var err error
 	out := &MachineConfigV2{}
-	kind := obj.TypeMeta.Kind
+	kind := obj.Kind
 	switch kind {
 	case machineConfigV2Amazonec2Kind:
 		resp := &MachineConfigV2Amazonec2{}
@@ -245,10 +245,10 @@ func createMachineConfigV2(c *Config, obj *MachineConfigV2) (*MachineConfigV2, e
 
 func deleteMachineConfigV2(c *Config, obj *MachineConfigV2) error {
 	if c == nil {
-		return fmt.Errorf("Deleting Machine Config V2: Provider config is nil")
+		return fmt.Errorf("deleting Machine Config V2: Provider config is nil")
 	}
 	if obj == nil {
-		return fmt.Errorf("Deleting Machine Config V2: Machine Config V2 is nil")
+		return fmt.Errorf("deleting Machine Config V2: Machine Config V2 is nil")
 	}
 	resource := &norman.Resource{
 		ID:      obj.ID,
@@ -261,10 +261,10 @@ func deleteMachineConfigV2(c *Config, obj *MachineConfigV2) error {
 
 func getMachineConfigV2ByID(c *Config, id, kind string) (*MachineConfigV2, error) {
 	if c == nil {
-		return nil, fmt.Errorf("Getting Machine Config V2: Provider config is nil")
+		return nil, fmt.Errorf("getting Machine Config V2: Provider config is nil")
 	}
-	if len(id) == 0 {
-		return nil, fmt.Errorf("Getting Machine Config V2: Machine Config V2 ID is empty")
+	if id == "" {
+		return nil, fmt.Errorf("getting Machine Config V2: Machine Config V2 ID is empty")
 	}
 	var err error
 	out := &MachineConfigV2{}
@@ -370,7 +370,7 @@ func updateMachineConfigV2(c *Config, obj *MachineConfigV2) (*MachineConfigV2, e
 	}
 	var err error
 	out := &MachineConfigV2{}
-	kind := obj.TypeMeta.Kind
+	kind := obj.Kind
 	switch kind {
 	case machineConfigV2Amazonec2Kind:
 		resp := &MachineConfigV2Amazonec2{}

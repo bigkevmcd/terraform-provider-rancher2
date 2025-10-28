@@ -124,7 +124,7 @@ func resourceRancher2ClusterV2Create(d *schema.ResourceData, meta interface{}) e
 
 	// Waiting for cluster v2 active if it has machine pools defined
 	if newCluster.Spec.RKEConfig != nil && newCluster.Spec.RKEConfig.MachinePools != nil && len(newCluster.Spec.RKEConfig.MachinePools) > 0 {
-		newCluster, err = waitForClusterV2State(meta.(*Config), newCluster.ID, clusterV2ActiveCondition, d.Timeout(schema.TimeoutCreate))
+		_, err = waitForClusterV2State(meta.(*Config), newCluster.ID, clusterV2ActiveCondition, d.Timeout(schema.TimeoutCreate))
 		if err != nil {
 			return err
 		}
@@ -167,7 +167,7 @@ func resourceRancher2ClusterV2Update(d *schema.ResourceData, meta interface{}) e
 	}
 	// Waiting for cluster v2 active if it has machine pools defined
 	if newCluster.Spec.RKEConfig != nil && newCluster.Spec.RKEConfig.MachinePools != nil && len(newCluster.Spec.RKEConfig.MachinePools) > 0 {
-		newCluster, err = waitForClusterV2State(meta.(*Config), newCluster.ID, clusterV2ActiveCondition, d.Timeout(schema.TimeoutCreate))
+		_, err = waitForClusterV2State(meta.(*Config), newCluster.ID, clusterV2ActiveCondition, d.Timeout(schema.TimeoutCreate))
 		if err != nil {
 			return err
 		}

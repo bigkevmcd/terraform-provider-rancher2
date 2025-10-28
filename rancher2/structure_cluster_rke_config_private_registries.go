@@ -12,7 +12,7 @@ func flattenClusterRKEConfigPrivateRegistriesECRCredentials(in *managementClient
 	}
 
 	var obj map[string]interface{}
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		obj = make(map[string]interface{})
 	} else {
 		obj = p[0].(map[string]interface{})

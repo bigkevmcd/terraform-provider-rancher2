@@ -53,7 +53,7 @@ func flattenClusterV2(d *schema.ResourceData, in *ClusterV2) error {
 	if in.Spec.RKEConfig != nil {
 		d.Set("rke_config", flattenClusterV2RKEConfig(in.Spec.RKEConfig))
 	}
-	if in.Spec.AgentEnvVars != nil && len(in.Spec.AgentEnvVars) > 0 {
+	if len(in.Spec.AgentEnvVars) > 0 {
 		d.Set("agent_env_vars", flattenEnvVarsV2(in.Spec.AgentEnvVars))
 	}
 	if len(in.Spec.CloudCredentialSecretName) > 0 {

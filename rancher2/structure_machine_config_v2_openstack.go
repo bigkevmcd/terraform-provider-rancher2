@@ -124,7 +124,7 @@ func flattenMachineConfigV2Openstack(in *MachineConfigV2Openstack) []interface{}
 // Expanders
 
 func expandMachineConfigV2Openstack(p []interface{}, source *MachineConfigV2) *MachineConfigV2Openstack {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 	obj := &MachineConfigV2Openstack{}

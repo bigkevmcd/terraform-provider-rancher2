@@ -1,7 +1,7 @@
 package rancher2
 
 import (
-	"github.com/rancher/rancher/pkg/apis/provisioning.cattle.io/v1"
+	v1 "github.com/rancher/rancher/pkg/apis/provisioning.cattle.io/v1"
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -25,7 +25,7 @@ func flattenClusterAgentPriorityClassV2(in *v1.PriorityClassSpec) []interface{} 
 // Expanders
 
 func expandClusterAgentPriorityClassV2(p []interface{}) *v1.PriorityClassSpec {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

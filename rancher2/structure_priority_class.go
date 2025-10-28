@@ -24,7 +24,7 @@ func flattenClusterAgentPriorityClass(in *v3.PriorityClassSpec) []interface{} {
 // Expanders
 
 func expandClusterAgentPriorityClass(p []interface{}) *v3.PriorityClassSpec {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if len(p) == 0 || p[0] == nil {
 		return nil
 	}
 

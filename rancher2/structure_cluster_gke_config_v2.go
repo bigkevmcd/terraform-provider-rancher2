@@ -511,7 +511,7 @@ func expandClusterGKEConfigV2NodePoolManagement(p []interface{}) *managementClie
 }
 
 func expandClusterGKEConfigV2NodePoolsConfig(p []interface{}) []managementClient.GKENodePoolConfig {
-	if p == nil || len(p) == 0 || p[0] == nil {
+	if p[0] == nil {
 		return nil
 	}
 	out := make([]managementClient.GKENodePoolConfig, len(p))
