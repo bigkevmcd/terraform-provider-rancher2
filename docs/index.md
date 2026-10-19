@@ -74,11 +74,56 @@ The following arguments are supported:
 * `access_key` - (Optional/Sensitive) Rancher API access key to connect to rancher. It can also be sourced from the `RANCHER_ACCESS_KEY` environment variable.
 * `secret_key` - (Optional/Sensitive) Rancher API secret key to connect to rancher. It can also be sourced from the `RANCHER_SECRET_KEY` environment variable.
 * `token_key` - (Optional/Sensitive) Rancher API token key to connect to rancher. It can also be sourced from the `RANCHER_TOKEN_KEY` environment variable. Could be used instead `access_key` and `secret_key`.
+* `credential_process` - (Optional) Run an external command to obtain the Rancher API token, instead of supplying `token_key`. Can not be used with `token_key`, `access_key` and `secret_key`, or `bootstrap`. See [Sourcing the token from an external process](#sourcing-the-token-from-an-external-process).
+  * `command` - (Required) Command to execute. It is not run through a shell, and is looked up on `PATH` if it is not an absolute path.
+  * `args` - (Optional) List of arguments passed to `command`.
 * `ca_certs` - CA certificates used to sign Rancher server tls certificates. Mandatory if self signed tls and insecure option false. It can also be sourced from the `RANCHER_CA_CERTS` environment variable.
 * `insecure` - (Optional) Allow insecure connection to Rancher. Mandatory if self signed tls and not ca_certs provided. It can also be sourced from the `RANCHER_INSECURE` environment variable.
 * `bootstrap` - (Optional) Enable bootstrap mode to manage `rancher2_bootstrap` resource. It can also be sourced from the `RANCHER_BOOTSTRAP` environment variable. Default: `false`
 * `retries` - (Deprecated) Use timeout instead
 * `timeout` - (Optional) Timeout duration to retry for Rancher connectivity and resource operations. Default: `"120s"`
+
+### Sourcing the token from an external process
+
+Instead of supplying `token_key` directly, the provider can run a command to
+fetch the token, for example from a password manager or secrets store:
+
+```terraform
+provider "rancher2" {
+  api_url = "https://rancher.example.com"
+
+  credential_process {
+    command = "rancher-token-helper"
+    args    = ["--profile", "production"]
+  }
+}
+```
+
+`command` is executed directly with `args` when the provider is configured; it
+is not run through a shell, so pipes, redirection and variable expansion are not
+available unless you invoke a shell explicitly, for example
+`command = "/bin/sh"` with `args = ["-c", "..."]`. The command is looked up on
+`PATH` if it is not an absolute path, and is subject to the provider `timeout`. It must exit
+with status zero and write a Kubernetes `ExecCredential` to stdout, as written
+by the Rancher CLI `rancher token` command. The token is read from
+`status.token`:
+
+```json
+{
+  "kind": "ExecCredential",
+  "apiVersion": "client.authentication.k8s.io/v1beta1",
+  "spec": {},
+  "status": {"token": "token-id:secret"}
+}
+```
+
+If the command fails, its stderr is included in the error reported by
+Terraform.
+
+When Terraform is run from a terminal, the command's stdin and stderr are
+connected to it, so the command can prompt for login, for example when
+`rancher token` has no cached token. The login must complete within the
+provider `timeout`. Without a terminal, the command runs without stdin.
 
 ## Security and Sensitive State
 

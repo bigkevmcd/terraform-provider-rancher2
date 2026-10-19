@@ -68,6 +68,29 @@ func Provider() terraform.ResourceProvider {
 				DefaultFunc: schema.EnvDefaultFunc("RANCHER_TOKEN_KEY", providerDefaultEmptyString),
 				Description: descriptions["token_key"],
 			},
+			"credential_process": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: descriptions["credential_process"],
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"command": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: descriptions["credential_process.command"],
+						},
+						"args": {
+							Type:        schema.TypeList,
+							Optional:    true,
+							Description: descriptions["credential_process.args"],
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
 			"ca_certs": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -186,15 +209,18 @@ func Provider() terraform.ResourceProvider {
 
 func init() {
 	descriptions = map[string]string{
-		"access_key": "API Key used to authenticate with the rancher server",
-		"secret_key": "API secret used to authenticate with the rancher server",
-		"token_key":  "API token used to authenticate with the rancher server",
-		"ca_certs":   "CA certificates used to sign rancher server tls certificates. Mandatory if self signed tls and insecure option false",
-		"insecure":   "Allow insecure connections to Rancher. Mandatory if self signed tls and not ca_certs provided",
-		"api_url":    "The URL to the rancher API",
-		"bootstrap":  "Bootstrap rancher server",
-		"retries":    "Rancher connection retries",
-		"timeout":    "Rancher connection timeout (retry every 5s). Golang duration format, ex: \"60s\"",
+		"access_key":                 "API Key used to authenticate with the rancher server",
+		"secret_key":                 "API secret used to authenticate with the rancher server",
+		"token_key":                  "API token used to authenticate with the rancher server",
+		"credential_process":         "External command executed to obtain the API token used to authenticate with the rancher server",
+		"credential_process.command": "Command to execute. It is not run through a shell and is looked up on PATH if not an absolute path",
+		"credential_process.args":    "Arguments passed to the command",
+		"ca_certs":                   "CA certificates used to sign rancher server tls certificates. Mandatory if self signed tls and insecure option false",
+		"insecure":                   "Allow insecure connections to Rancher. Mandatory if self signed tls and not ca_certs provided",
+		"api_url":                    "The URL to the rancher API",
+		"bootstrap":                  "Bootstrap rancher server",
+		"retries":                    "Rancher connection retries",
+		"timeout":                    "Rancher connection timeout (retry every 5s). Golang duration format, ex: \"60s\"",
 	}
 }
 
@@ -215,6 +241,21 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	// Set tokenKey based on accessKey and secretKey if needed
 	if tokenKey == providerDefaultEmptyString && accessKey != providerDefaultEmptyString && secretKey != providerDefaultEmptyString {
 		tokenKey = accessKey + ":" + secretKey
+	}
+
+	if v, ok := d.Get("credential_process").([]interface{}); ok && len(v) > 0 && v[0] != nil {
+		if tokenKey != providerDefaultEmptyString {
+			return nil, fmt.Errorf("[ERROR] credential_process can not be used with token_key or access_key and secret_key")
+		}
+		if bootstrap {
+			return nil, fmt.Errorf("[ERROR] Cannot use credential_process with Bootstrap mode")
+		}
+		process := v[0].(map[string]interface{})
+		args := toArrayString(process["args"].([]interface{}))
+		tokenKey, err = runCredentialProcess(process["command"].(string), args, timeout)
+		if err != nil {
+			return nil, fmt.Errorf("[ERROR] %v", err)
+		}
 	}
 
 	config := &Config{
