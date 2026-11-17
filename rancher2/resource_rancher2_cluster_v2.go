@@ -208,6 +208,15 @@ func resourceRancher2ClusterV2Update(d *schema.ResourceData, meta interface{}) e
 		return err
 	}
 
+	// Fetch the current object so metadata Terraform doesn't manage (e.g.
+	// finalizers) is carried over; the PUT replaces the whole object and would
+	// otherwise clear it, causing Rancher to drop field.cattle.io/creatorId.
+	current, err := getClusterV2ByID(meta.(*Config), d.Id())
+	if err != nil {
+		return err
+	}
+	cluster.ObjectMeta.Finalizers = current.ObjectMeta.Finalizers
+
 	if clusterV2LocalAuthEndpointShouldUseInternalCACerts(d) {
 		clusterV1ID := d.Get("cluster_v1_id").(string)
 		caCert, err := getClusterV2LocalAuthEndpointCACert(clusterV1ID, func(clusterV1ID string) (string, error) {
@@ -219,10 +228,6 @@ func resourceRancher2ClusterV2Update(d *schema.ResourceData, meta interface{}) e
 		if caCert != "" {
 			cluster.Spec.LocalClusterAuthEndpoint.CACerts = caCert
 		} else {
-			current, err := getClusterV2ByID(meta.(*Config), d.Id())
-			if err != nil {
-				return err
-			}
 			cluster.Spec.LocalClusterAuthEndpoint.CACerts = current.Spec.LocalClusterAuthEndpoint.CACerts
 		}
 	}
